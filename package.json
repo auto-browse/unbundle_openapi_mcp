@@ -1,10 +1,19 @@
 {
-  "name": "unbundle-openapi-mcp",
-  "version": "1.0.0",
+  "name": "@auto-browse/unbundle-openapi-mcp",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
     "unbundle-openapi-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsc",

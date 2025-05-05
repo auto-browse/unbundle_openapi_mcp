@@ -7,72 +7,50 @@ This project provides a Model Context Protocol (MCP) server with tools to split 
 - Node.js (LTS version recommended, e.g., v18 or v20)
 - npm (comes with Node.js)
 
-## Installation
+## Usage
 
-1.  Clone this repository or download the source code.
-2.  Navigate to the `unbundle_openapi_mcp` directory.
-3.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-## Building
-
-To compile the TypeScript code to JavaScript, run:
+The easiest way to use this server is via `npx`, which ensures you are always using the latest version without needing a global installation.
 
 ```bash
-npm run build
+npx @auto-browse/unbundle-openapi-mcp@latest
 ```
 
-This will create a `dist` directory containing the compiled code.
-
-## Running the Server
-
-To start the MCP server, run:
+Alternatively, you can install it globally (not generally recommended):
 
 ```bash
-npm start
+npm install -g @auto-browse/unbundle-openapi-mcp
+# Then run using: unbundle-openapi-mcp
 ```
 
-The server will listen for MCP requests on standard input/output (stdio).
+The server will start and listen for MCP requests on standard input/output (stdio).
 
 ## Client Configuration
 
-To use this server with MCP clients like VS Code, Cline, Cursor, or Claude Desktop, you need to add its configuration to the respective settings file.
-
-**Important:** Ensure you have run `npm install` and `npm run build` in the `unbundle_openapi_mcp` directory first.
+To use this server with MCP clients like VS Code, Cline, Cursor, or Claude Desktop, add its configuration to the respective settings file. The recommended approach uses `npx`.
 
 ### VS Code / Cline / Cursor
 
 Add the following to your User `settings.json` (accessible via `Ctrl+Shift+P` > `Preferences: Open User Settings (JSON)`) or to a `.vscode/mcp.json` file in your workspace root.
 
-This configuration assumes the `unbundle_openapi_mcp` directory is located directly within your workspace folder (`${workspaceFolder}`). Adjust the paths if your project structure is different.
-
 ```json
 // In settings.json:
 "mcp.servers": {
-  "split_openapi": {
-    "command": "node",
+  "unbundle_openapi": { // You can choose any key name
+    "command": "npx",
     "args": [
-      // Path to the compiled server script relative to workspace root
-      "${workspaceFolder}/unbundle_openapi_mcp/dist/index.js"
-    ],
-    // Set the working directory for the server process
-    "cwd": "${workspaceFolder}/unbundle_openapi_mcp"
+      "@auto-browse/unbundle-openapi-mcp@latest"
+    ]
   }
   // ... other servers can be added here
 },
 
 // Or in .vscode/mcp.json (omit the top-level "mcp.servers"):
 {
-  "split_openapi": {
-    "command": "node",
+  "unbundle_openapi": { // You can choose any key name
+    "command": "npx",
     "args": [
-      // Path to the compiled server script relative to workspace root
-      "${workspaceFolder}/unbundle_openapi_mcp/dist/index.js"
-    ],
-    // Set the working directory for the server process
-    "cwd": "${workspaceFolder}/unbundle_openapi_mcp"
+      "@auto-browse/unbundle-openapi-mcp@latest"
+    ]
   }
   // ... other servers can be added here
 }
@@ -80,19 +58,15 @@ This configuration assumes the `unbundle_openapi_mcp` directory is located direc
 
 ### Claude Desktop
 
-Add the following to your `claude_desktop_config.json` file. You will need to replace `<path-to-project>` with the actual absolute or relative path to the directory containing the `unbundle_openapi_mcp` folder on your system.
+Add the following to your `claude_desktop_config.json` file.
 
 ```json
 {
 	"mcpServers": {
-		"split_openapi": {
-			"command": "node",
-			"args": [
-				// Replace with the correct path to the compiled script
-				"<path-to-project>/unbundle_openapi_mcp/dist/index.js"
-			],
-			// Set the working directory to the server's root
-			"cwd": "<path-to-project>/unbundle_openapi_mcp"
+		"unbundle_openapi": {
+			// You can choose any key name
+			"command": "npx",
+			"args": ["@auto-browse/unbundle-openapi-mcp@latest"]
 		}
 		// ... other servers can be added here
 	}
@@ -157,4 +131,14 @@ After adding the configuration, restart your client application for the changes 
 }
 ```
 
-**Note:** This server uses `npx @redocly/cli@latest` to execute the underlying `split` and `bundle` commands, so `@redocly/cli` does not need to be installed globally, but an internet connection might be required for `npx` to fetch the package if it's not cached. Temporary files are created during the process and automatically cleaned up.
+**Note:** This server uses `npx @redocly/cli@latest` internally to execute the underlying `split` and `bundle` commands. An internet connection might be required for `npx` to fetch `@redocly/cli` if it's not cached. Temporary files are created during the `extract_openapi_endpoints` process and automatically cleaned up.
+
+## Development
+
+If you want to contribute or run the server from source:
+
+1.  **Clone:** Clone this repository.
+2.  **Navigate:** `cd unbundle_openapi_mcp`
+3.  **Install Dependencies:** `npm install`
+4.  **Build:** `npm run build` (compiles TypeScript to `dist/`)
+5.  **Run:** `npm start` (starts the server using the compiled code in `dist/`)
