@@ -12,15 +12,15 @@ import yaml from "js-yaml";
 
 const exec = promisify(execCb);
 
-// Define the schema for the tool's arguments
-const SplitArgsSchema = z.object({
-    apiPath: z.string().describe("Path to the input OpenAPI definition file."),
-    outputDir: z.string().describe("Path to the directory for split output files.")
-    // Optional: Add other redocly split options like 'separator' later if needed.
+// Define the schema for the split tool's arguments
+const SplitOpenApiArgsSchema = z.object({
+    apiPath: z.string().describe("Absolute path to the input OpenAPI definition file."), // Changed description for consistency
+    outputDir: z.string().describe("Absolute path to the directory for split output files.") // Changed description for consistency
+    // Optional: Add other split options like 'separator' later if needed.
 });
 
 // Define the schema for the extract tool's arguments
-const ExtractArgsSchema = z.object({
+const ExtractOpenApiEndpointsArgsSchema = z.object({
     inputApiPath: z.string().describe("Absolute path to the large input OpenAPI definition file."),
     endpointsToKeep: z.array(z.string()).describe("List of exact endpoint paths to keep (e.g., ['/users', '/users/{id}'])."),
     outputApiPath: z.string().describe("Absolute path where the final, smaller bundled OpenAPI file should be saved.")
@@ -29,14 +29,14 @@ const ExtractArgsSchema = z.object({
 
 // Create an MCP server instance
 const server = new McpServer({
-    name: "redocly-split-server",
+    name: "unbundle-openapi-mcp-server", // Renamed server
     version: "1.0.0"
 });
 
-// Register the 'redocly_split' tool
+// Register the 'split_openapi' tool
 server.tool(
-    "redocly_split",
-    SplitArgsSchema.shape, // Use .shape to pass the raw shape definition
+    "split_openapi", // Renamed tool
+    SplitOpenApiArgsSchema.shape, // Use renamed schema variable
     async ({ apiPath, outputDir }, extra) => { // Arguments are the first parameter
         // Construct the command using npx to avoid global dependency issues
         // Quote paths to handle potential spaces
@@ -77,16 +77,16 @@ server.tool(
     }
 );
 
-// Register the 'redocly_extract_endpoints' tool
+// Register the 'extract_openapi_endpoints' tool
 server.tool(
-    "redocly_extract_endpoints",
-    ExtractArgsSchema.shape,
+    "extract_openapi_endpoints", // Renamed tool
+    ExtractOpenApiEndpointsArgsSchema.shape, // Use renamed schema variable
     async ({ inputApiPath, endpointsToKeep, outputApiPath }, extra) => {
         let tempDir: string | undefined;
         try
         {
             // 1. Create a temporary directory
-            tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'redocly-extract-'));
+            tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'openapi-extract-')); // Generic temp prefix
             console.error(`Created temp directory: ${tempDir}`);
 
             // 2. Split the input API into the temporary directory
@@ -188,7 +188,7 @@ async function runServer() {
     {
         const transport = new StdioServerTransport();
         await server.connect(transport);
-        console.error("Redocly Split MCP Server running on stdio.");
+        console.error("Unbundle OpenAPI MCP Server running on stdio."); // Updated log message
     } catch (error)
     {
         console.error("Fatal error running server:", error);

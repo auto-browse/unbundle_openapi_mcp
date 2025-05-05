@@ -1,6 +1,6 @@
-# Redocly Split MCP Server
+# Unbundle OpenAPI MCP Server
 
-This project provides a Model Context Protocol (MCP) server that wraps the `redocly split` command from the `@redocly/cli` tool. It allows an MCP client (like an AI assistant) to unbundle OpenAPI specification files programmatically.
+This project provides a Model Context Protocol (MCP) server with tools to split OpenAPI specification files into multiple files or extract specific endpoints into a new file. It allows an MCP client (like an AI assistant) to manipulate OpenAPI specifications programmatically.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ This project provides a Model Context Protocol (MCP) server that wraps the `redo
 ## Installation
 
 1.  Clone this repository or download the source code.
-2.  Navigate to the `redocly-mcp-server` directory.
+2.  Navigate to the `unbundle_openapi_mcp` directory.
 3.  Install dependencies:
     ```bash
     npm install
@@ -40,39 +40,39 @@ The server will listen for MCP requests on standard input/output (stdio).
 
 To use this server with MCP clients like VS Code, Cline, Cursor, or Claude Desktop, you need to add its configuration to the respective settings file.
 
-**Important:** Ensure you have run `npm install` and `npm run build` in the `redocly-mcp-server` directory first.
+**Important:** Ensure you have run `npm install` and `npm run build` in the `unbundle_openapi_mcp` directory first.
 
 ### VS Code / Cline / Cursor
 
 Add the following to your User `settings.json` (accessible via `Ctrl+Shift+P` > `Preferences: Open User Settings (JSON)`) or to a `.vscode/mcp.json` file in your workspace root.
 
-This configuration assumes the `redocly-mcp-server` directory is located directly within your workspace folder (`${workspaceFolder}`). Adjust the paths if your project structure is different.
+This configuration assumes the `unbundle_openapi_mcp` directory is located directly within your workspace folder (`${workspaceFolder}`). Adjust the paths if your project structure is different.
 
 ```json
 // In settings.json:
 "mcp.servers": {
-  "redocly_split": {
+  "split_openapi": {
     "command": "node",
     "args": [
       // Path to the compiled server script relative to workspace root
-      "${workspaceFolder}/redocly-mcp-server/dist/index.js"
+      "${workspaceFolder}/unbundle_openapi_mcp/dist/index.js"
     ],
     // Set the working directory for the server process
-    "cwd": "${workspaceFolder}/redocly-mcp-server"
+    "cwd": "${workspaceFolder}/unbundle_openapi_mcp"
   }
   // ... other servers can be added here
 },
 
 // Or in .vscode/mcp.json (omit the top-level "mcp.servers"):
 {
-  "redocly_split": {
+  "split_openapi": {
     "command": "node",
     "args": [
       // Path to the compiled server script relative to workspace root
-      "${workspaceFolder}/redocly-mcp-server/dist/index.js"
+      "${workspaceFolder}/unbundle_openapi_mcp/dist/index.js"
     ],
     // Set the working directory for the server process
-    "cwd": "${workspaceFolder}/redocly-mcp-server"
+    "cwd": "${workspaceFolder}/unbundle_openapi_mcp"
   }
   // ... other servers can be added here
 }
@@ -80,19 +80,19 @@ This configuration assumes the `redocly-mcp-server` directory is located directl
 
 ### Claude Desktop
 
-Add the following to your `claude_desktop_config.json` file. You will need to replace `<path-to-project>` with the actual absolute or relative path to the directory containing the `redocly-mcp-server` folder on your system.
+Add the following to your `claude_desktop_config.json` file. You will need to replace `<path-to-project>` with the actual absolute or relative path to the directory containing the `unbundle_openapi_mcp` folder on your system.
 
 ```json
 {
 	"mcpServers": {
-		"redocly_split": {
+		"split_openapi": {
 			"command": "node",
 			"args": [
 				// Replace with the correct path to the compiled script
-				"<path-to-project>/redocly-mcp-server/dist/index.js"
+				"<path-to-project>/unbundle_openapi_mcp/dist/index.js"
 			],
 			// Set the working directory to the server's root
-			"cwd": "<path-to-project>/redocly-mcp-server"
+			"cwd": "<path-to-project>/unbundle_openapi_mcp"
 		}
 		// ... other servers can be added here
 	}
@@ -103,14 +103,14 @@ After adding the configuration, restart your client application for the changes 
 
 ## MCP Tools Provided
 
-### `redocly_split`
+### `split_openapi`
 
 **Description:** Executes the `redocly split` command to unbundle an OpenAPI definition file into multiple smaller files based on its structure.
 
 **Arguments:**
 
-- `apiPath` (string, required): The path to the input OpenAPI definition file (e.g., `openapi.yaml`).
-- `outputDir` (string, required): The path to the directory where the split output files should be saved. This directory will be created if it doesn't exist.
+- `apiPath` (string, required): The absolute path to the input OpenAPI definition file (e.g., `openapi.yaml`).
+- `outputDir` (string, required): The absolute path to the directory where the split output files should be saved. This directory will be created if it doesn't exist.
 
 **Returns:**
 
@@ -121,15 +121,15 @@ After adding the configuration, restart your client application for the changes 
 
 ```json
 {
-	"tool_name": "redocly_split",
+	"tool_name": "split_openapi",
 	"arguments": {
-		"apiPath": "path/to/your/openapi.yaml",
-		"outputDir": "path/to/output/directory"
+		"apiPath": "/path/to/your/openapi.yaml",
+		"outputDir": "/path/to/output/directory"
 	}
 }
 ```
 
-### `redocly_extract_endpoints`
+### `extract_openapi_endpoints`
 
 **Description:** Extracts specific endpoints from a large OpenAPI definition file and creates a new, smaller OpenAPI file containing only those endpoints and their referenced components. It achieves this by splitting the original file, modifying the structure to keep only specified paths, and then bundling the result.
 
@@ -148,7 +148,7 @@ After adding the configuration, restart your client application for the changes 
 
 ```json
 {
-	"tool_name": "redocly_extract_endpoints",
+	"tool_name": "extract_openapi_endpoints",
 	"arguments": {
 		"inputApiPath": "/path/to/large-openapi.yaml",
 		"endpointsToKeep": ["/users", "/users/{userId}/profile"],

@@ -1,20 +1,26 @@
 {
-  "name": "redocly-mcp-server",
+  "name": "unbundle-openapi-mcp",
   "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "redocly-mcp-server": "dist/index.js"
+    "unbundle-openapi-mcp": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "mcp",
+    "openapi",
+    "split",
+    "extract",
+    "unbundle"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "MCP server for splitting and extracting parts of OpenAPI specifications",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.0",
     "js-yaml": "^4.1.0",
