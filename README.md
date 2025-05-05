@@ -101,7 +101,7 @@ Add the following to your `claude_desktop_config.json` file. You will need to re
 
 After adding the configuration, restart your client application for the changes to take effect.
 
-## MCP Tool Provided
+## MCP Tools Provided
 
 ### `redocly_split`
 
@@ -129,4 +129,32 @@ After adding the configuration, restart your client application for the changes 
 }
 ```
 
-**Note:** This server uses `npx @redocly/cli@latest` to execute the command, so `@redocly/cli` does not need to be installed globally, but an internet connection might be required for `npx` to fetch the package if it's not cached.
+### `redocly_extract_endpoints`
+
+**Description:** Extracts specific endpoints from a large OpenAPI definition file and creates a new, smaller OpenAPI file containing only those endpoints and their referenced components. It achieves this by splitting the original file, modifying the structure to keep only specified paths, and then bundling the result.
+
+**Arguments:**
+
+- `inputApiPath` (string, required): The absolute path to the large input OpenAPI definition file.
+- `endpointsToKeep` (array of strings, required): A list of the exact endpoint paths (strings) to include in the final output (e.g., `["/api", "/api/projects/{id}{.format}"]`). Paths not found in the original spec will be ignored.
+- `outputApiPath` (string, required): The absolute path where the final, smaller bundled OpenAPI file should be saved. The directory will be created if it doesn't exist.
+
+**Returns:**
+
+- On success: A text message indicating the path of the created file and the standard output from the `redocly bundle` command.
+- On failure: An error message containing details about the step that failed (split, modify, bundle), marked with `isError: true`.
+
+**Example Usage (Conceptual MCP Request):**
+
+```json
+{
+	"tool_name": "redocly_extract_endpoints",
+	"arguments": {
+		"inputApiPath": "/path/to/large-openapi.yaml",
+		"endpointsToKeep": ["/users", "/users/{userId}/profile"],
+		"outputApiPath": "/path/to/extracted-openapi.yaml"
+	}
+}
+```
+
+**Note:** This server uses `npx @redocly/cli@latest` to execute the underlying `split` and `bundle` commands, so `@redocly/cli` does not need to be installed globally, but an internet connection might be required for `npx` to fetch the package if it's not cached. Temporary files are created during the process and automatically cleaned up.
