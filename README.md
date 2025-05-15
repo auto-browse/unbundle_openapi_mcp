@@ -1,4 +1,5 @@
 # Unbundle OpenAPI MCP Server
+[![smithery badge](https://smithery.ai/badge/@auto-browse/unbundle_openapi_mcp)](https://smithery.ai/server/@auto-browse/unbundle_openapi_mcp)
 
 This project provides a Model Context Protocol (MCP) server with tools to split OpenAPI specification files into multiple files or extract specific endpoints into a new file. It allows an MCP client (like an AI assistant) to manipulate OpenAPI specifications programmatically.
 
@@ -8,6 +9,14 @@ This project provides a Model Context Protocol (MCP) server with tools to split 
 - npm (comes with Node.js)
 
 ## Usage
+
+### Installing via Smithery
+
+To install Unbundle OpenAPI MCP Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@auto-browse/unbundle_openapi_mcp):
+
+```bash
+npx -y @smithery/cli install @auto-browse/unbundle_openapi_mcp --client claude
+```
 
 The easiest way to use this server is via `npx`, which ensures you are always using the latest version without needing a global installation.
 
