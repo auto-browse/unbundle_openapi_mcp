@@ -1,6 +1,10 @@
 # Unbundle OpenAPI MCP Server
 [![smithery badge](https://smithery.ai/badge/@auto-browse/unbundle_openapi_mcp)](https://smithery.ai/server/@auto-browse/unbundle_openapi_mcp)
 
+<a href="https://glama.ai/mcp/servers/@auto-browse/unbundle_openapi_mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@auto-browse/unbundle_openapi_mcp/badge" alt="Unbundle OpenAPI Specs MCP server" />
+</a>
+
 This project provides a Model Context Protocol (MCP) server with tools to split OpenAPI specification files into multiple files or extract specific endpoints into a new file. It allows an MCP client (like an AI assistant) to manipulate OpenAPI specifications programmatically.
 
 ## Prerequisites
