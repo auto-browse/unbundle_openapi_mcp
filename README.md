@@ -144,7 +144,7 @@ After adding the configuration, restart your client application for the changes 
 
 ## Development
 
-If you want to contribute or run the server from source:
+If you want to contribute or run the server from source :
 
 1.  **Clone:** Clone this repository.
 2.  **Navigate:** `cd unbundle_openapi_mcp`
